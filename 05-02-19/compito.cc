@@ -31,6 +31,28 @@ void stampa(lista l){
     }
 }
 
+carta * scala(lista carte, int&  lunghezza){
+    carta* c = NULL;
+    lunghezza = 1;
+    bool trovato = false;
+    while(tail(carte) != NULL && !trovato){
+        if(head(tail(carte)).seme == head(carte).seme && head(tail(carte)).valore == head(carte).valore+1){
+            if(c == NULL)
+                c = &carte->inf;
+            lunghezza++;
+        }
+        else{
+            if(lunghezza >= 3)
+                trovato = true;
+            else{ 
+                c = NULL;
+            }
+        }
+        carte = tail(carte);
+    }
+    return c;
+}
+
 int main(){
     lista g1 = NULL, g2 = NULL;
     /*cout<<"Carte per il giocatore 1: ";
@@ -46,4 +68,20 @@ int main(){
     cout<<endl<<"Giocatore 2: ";
     stampa(g2);
     cout<<endl;
+    int lung;
+    cout<<"Giocatore 1: ";
+    lista e = search(g1, *scala(g1, lung));
+    for(int i=0;i<lung;i++){
+        print(head(e));
+        cout<<" ";
+        e=tail(e);
+    }
+    cout<<endl<<"Giocatore 2: ";
+    lista e1 = search(g2, *scala(g2, lung));
+    for(int i=0;i<lung;i++){
+        print(head(e1));
+        cout<<" ";
+        e1=tail(e1);
+    }
+    cout<<endl;   
 }
