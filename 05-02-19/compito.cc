@@ -7,7 +7,7 @@ using namespace std;
 
 void pesca(lista &l){
     tipo_inf nuovo;
-    cout<<"Inserisci una nuova carta valore seme: ";
+    cout<<"Pesca ";
     cin>>nuovo.valore>>nuovo.seme;
     lista e = new_elem(nuovo);
     l = ord_insert_elem(l,e);
@@ -35,7 +35,7 @@ carta * scala(lista carte, int&  lunghezza){
     carta* c = NULL;
     lunghezza = 1;
     bool trovato = false;
-    while(tail(carte) != NULL && !trovato){
+    while(carte!= NULL && tail(carte) != NULL && !trovato){
         if(head(tail(carte)).seme == head(carte).seme && head(tail(carte)).valore == head(carte).valore+1){
             if(c == NULL)
                 c = &carte->inf;
@@ -46,11 +46,30 @@ carta * scala(lista carte, int&  lunghezza){
                 trovato = true;
             else{ 
                 c = NULL;
+                lunghezza = 1;
             }
         }
         carte = tail(carte);
     }
     return c;
+}
+
+int cala(lista &carte){
+    int lung;
+    carta *c = scala(carte,lung);
+    if(c == NULL)
+        return 0;
+    lista e = search(carte, *c);
+    int punteggio = 0;
+    for(int i=0;i<lung;i++){
+        print(head(e));
+        punteggio += head(e).valore;
+        cout<<" ";
+        lista tmp = e;
+        e=tail(e);
+        carte = delete_elem(carte, tmp);
+    }
+    return punteggio;
 }
 
 int main(){
@@ -83,5 +102,39 @@ int main(){
         cout<<" ";
         e1=tail(e1);
     }
-    cout<<endl;   
+    cout<<endl<<endl;
+    int mano = 1;
+    int punt1 = 0, punt2=0;
+    bool turno = true;
+    while(g1 != NULL && g2 != NULL){
+        if(turno){
+            cout<<"Mano "<<mano<<endl<<"Giocatore 1: ";
+            mano++;
+            pesca(g1);
+            cout<<"Cala: ";
+            punt1 += cala(g1);
+            cout<<"Carte in mano: ";
+            stampa(g1);
+            cout<<" Punteggio: "<<punt1<<endl;
+            turno = false;
+        }
+        else{
+            cout<<"Giocatore 2: ";
+            pesca(g2);
+            cout<<"Cala: ";
+            punt2 += cala(g2);
+            cout<<"Carte in mano: ";
+            stampa(g2);
+            cout<<" Punteggio: "<<punt2<<endl;
+            turno = true;
+        }
+        
+    }
+    cout<<"Fine gioco! ";
+    cout<<"Vince il gioco il Giocatore ";
+    if(punt1 > punt2)
+        cout<<"1 con "<<punt1<<" punti"<<endl;
+    else  cout<<"2 con "<<punt2<<" punti"<<endl;  
+    
+    
 }
