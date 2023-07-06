@@ -54,9 +54,31 @@ carta * scala(lista carte, int&  lunghezza){
     return c;
 }
 
+carta* best_scala(lista carte, int& lunghezza){
+    int tmpn=0, max=0;
+    carta* tmpc = NULL;
+    carta* maxlc = NULL;
+    do{
+        tmpc = scala(carte, tmpn);
+        if(tmpc != NULL && tmpn > max){
+            max = tmpn;
+            maxlc = tmpc;
+        }
+        if(tmpc != NULL){
+            lista e = search(carte, *tmpc);
+            for(int i=0;i<tmpn && e != NULL;i++)
+                e = tail(e);
+            carte = e;
+        }   
+
+    }while(tmpc != NULL && carte != NULL);
+    lunghezza = max;
+    return maxlc;
+}
+
 int cala(lista &carte){
     int lung;
-    carta *c = scala(carte,lung);
+    carta *c = best_scala(carte,lung);
     if(c == NULL)
         return 0;
     lista e = search(carte, *c);
